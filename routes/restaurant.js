@@ -19,11 +19,17 @@ restaurantRoute
        res.status(200).send( result)
    })
 })
-//get all restaurant and it associated review and comment
+//get all restaurant and it associated review
 .get('/getall',(req,res)=>{
         Restaurant.findAll({include: [{ all: true, nested: true }]}).then((restaurants)=>{
              res.status(200).send(restaurants)
         })
+})
+//get a specific restaurant and its associated review
+.get('/getall',(req,res)=>{
+    Restaurant.findAll({include: [{ all: true, nested: true }]},{RestaurantId:'1'}).then((restaurant)=>{
+         res.status(200).send(restaurant)
+    })
 })
 //get a specific restaurant and it associated review and comment for a specific user(Favourites)
 .get('/getrestaurant',(req,res)=>{

@@ -8,7 +8,7 @@ let userRoute = express.Router()
 userRoute.use(bodyParser.json())
 
 userRoute
-.post('/signup', (req,res)=>{
+.post('/signup', (req,res)=>{//sample user signup
     User.create({
         userName: req.body.userName,
         firstName: req.body.firstName
@@ -18,22 +18,14 @@ userRoute
         res.status(404).send(err)
     })
 })
-//get my previous reviews including the comment with commentor and the restaurant it belong too
+//get my previous reviews including  the restaurant it belongs too
 .get('/getmyreview',(req,res)=>{
     Review.findAll({include: [{ all: true, nested: true }]},{ UserId: '1'})
     .then((userReviews)=>{
          res.status(200).send({userReviews})
     })
 })
-// .get('/getmycomment',(req,res)=>{
-//     Comment.findAll({include: [{ model: Review, nested: true,include:{model:User,as:'Reviewer' }}
-//     ]},{ UserId: '1'})
-//     .then((userComments)=>{    //{include: [{ all: true, nested: true }]}
-//          res.status(200).send({userComments})
-//     }).catch((err)=>{
-//         res.status(400).send(err)
-//     })
-// })
+
 .get('/profile',(req,res)=>{
     Restaurant.findAll({include: [{ model: Restaurant,as:'Favourites' },{UserId:'1'}]})//{include: [{ all: true, nested: true }]}
     .then((user)=>{
