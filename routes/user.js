@@ -20,21 +20,20 @@ userRoute
 })
 //get my previous reviews including the comment with commentor and the restaurant it belong too
 .get('/getmyreview',(req,res)=>{
-    Review.findAll({include: [{ model: Comment, nested: true,include:{model:User,as:'Commentor'} }
-,{model:Restaurant}]},{ UserId: '1'})
+    Review.findAll({include: [{ all: true, nested: true }]},{ UserId: '1'})
     .then((userReviews)=>{
          res.status(200).send({userReviews})
     })
 })
-.get('/getmycomment',(req,res)=>{
-    Comment.findAll({include: [{ model: Review, nested: true,include:{model:User,as:'Reviewer' }}
-    ]},{ UserId: '1'})
-    .then((userComments)=>{    //{include: [{ all: true, nested: true }]}
-         res.status(200).send({userComments})
-    }).catch((err)=>{
-        res.status(400).send(err)
-    })
-})
+// .get('/getmycomment',(req,res)=>{
+//     Comment.findAll({include: [{ model: Review, nested: true,include:{model:User,as:'Reviewer' }}
+//     ]},{ UserId: '1'})
+//     .then((userComments)=>{    //{include: [{ all: true, nested: true }]}
+//          res.status(200).send({userComments})
+//     }).catch((err)=>{
+//         res.status(400).send(err)
+//     })
+// })
 .get('/profile',(req,res)=>{
     Restaurant.findAll({include: [{ model: Restaurant,as:'Favourites' },{UserId:'1'}]})//{include: [{ all: true, nested: true }]}
     .then((user)=>{

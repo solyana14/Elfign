@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Review.associate = (models) => {
     // associations can be defined here
-    Review.hasMany(models.Comment)
+    //Review.hasMany(models.Comment)
     Review.belongsTo(models.Restaurant)
     Review.belongsTo(models.User,{as: 'Reviewer', foreignKey: 'UserId'})
   };
