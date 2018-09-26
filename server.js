@@ -7,7 +7,8 @@ const {userRoute} = require('./routes/user')
 const {reviewRoute} = require('./routes/review')
 const {restaurantRoute} = require('./routes/restaurant')
 const app = express()
-
+const db = require('./models')
+//console.log()
 //app.use('/comments',commentRoute);
 app.use('/user',userRoute);
 app.use('/reviews',reviewRoute);
@@ -18,3 +19,5 @@ app.use(bodyParser.json())
 app.listen(5000,()=>{
     console.log('welcome heheheheh')
 })
+
+module.exports ={app}

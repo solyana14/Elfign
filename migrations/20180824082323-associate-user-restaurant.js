@@ -19,11 +19,11 @@ module.exports = {
       primaryKey: true
     },
     createdAt: {
-      allowNull: false,
+      //allowNull: false,
       type: Sequelize.DATE
     },
     updatedAt: {
-      allowNull: false,
+      //allowNull: false,
       type: Sequelize.DATE
     }
   });

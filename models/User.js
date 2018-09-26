@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     User.hasMany(models.Review)//{as: 'MyReviews'}
     //User.hasMany(models.Comment)//{as: 'MyComments'}
-    User.belongsToMany(models.Restaurant,{as:'Favourites',through: 'UserRestaurant', foreignKey: 'UserId'})
+    User.belongsToMany(models.Restaurant,{as:'Favourites',through: 'UserRestaurant', foreignKey: 'UserId',otherKey: 'RestaurantId'})
   };
   return User;
 };
