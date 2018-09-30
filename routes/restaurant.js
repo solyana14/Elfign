@@ -2,21 +2,38 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const Review = require('../models').Review
 const Restaurant = require('../models').Restaurant
-const Comment = require('../models').Comment
+const Cusine = require('../models').Cusine
 const User = require('../models').User
 let restaurantRoute = express.Router()
-
+const Location = require('../models').Location
 restaurantRoute.use(bodyParser.json())
-
+let testRestaurant;
 restaurantRoute
 //create a restaurant
 .post('/create',(req,res)=>{
+    let phoneNumber = parseInt(req.body.phoneNumber)
+    console.log(phoneNumber)
     Restaurant.create({
-        name:'this is a Nmae of the Restaurant',
-        phoneNumber:1234567,
-        webSite: 'webSite of the restaurant',
-   }).then((result)=>{
-       res.status(200).send( result)
+        name:req.body.name,
+        phoneNumber:req.body.phoneNumber,
+        webSite: req.body.webSite,
+   }).then((restaurant)=>{  
+       testRestaurant=restaurant
+       return Location.create({
+           longitude: 9.3653746,
+           lattitude: 34.4627364,
+           relativeLocation: 'some where around tele'
+       }).then(location=>{
+           //location.setRestaurant(testRestaurant);
+           testRestaurant.setLocation(location)
+           return Cusine.findOrCreate({where:{name:'kitfo'}})
+           .spread((cusine,created)=>{
+               //console.log(testRestaurant.CusineId)
+               testRestaurant.setCusines(cusine)
+               res.status(200).send(testRestaurant)
+           })
+           //res.status(200).send(testRestaurant)
+       })
    })
 })
 //get all restaurant and it associated review

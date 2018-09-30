@@ -29,6 +29,9 @@ module.exports = {
       },
       RestaurantId:{
         type: Sequelize.INTEGER
+      },
+      RatingId:{
+        type:Sequelize.INTEGER
       }
     });
   },

@@ -6,9 +6,8 @@ const Restaurant = require('../models').Restaurant
 const bodyParser = require('body-parser')
 let userRoute = express.Router()
 userRoute.use(bodyParser.json())
-
-userRoute
-.post('/signup', (req,res)=>{//sample user signup
+var newFav
+userRoute.post('/signup', (req,res)=>{//sample user signup
     User.create({
         userName: req.body.userName,
         firstName: req.body.firstName
@@ -29,20 +28,28 @@ userRoute
 .get('/profile',(req,res)=>{
     User.findAll({include: [{ all: true, nested: true }],where:{id:1}})//{include: [{ all: true, nested: true }]}//{include: [{ model: Restaurant,as:'Favourites' },{UserId:'1'}]}
     .then((user)=>{
-         res.status(200).send(user +'ddddddd')
+         res.status(200).send(user )
     }).catch((err)=>{
         res.status(400).send(err+'fffffff')
     })
 })
+// ** this should only return the favouries only 
+// .get('/favourites',(req,res)=>{
+//     User.findOne({
+//         where:{id:'1'},attributes:['Favourites']
+//     }).then((result)=>{
+//         res.send(result)
+//     })
+// })
 //add favourite restaurant to a user
 .get('/add/favourites',(req,res)=>{
-    Restaurant.findById('1').then((restaurant)=>{
-        var newFav = restaurant;
-        return newFav
-    }).then((newFav)=>{
-        User.findById('1').then((user)=>{
-            user.setFavourites()
-        })
+    Restaurant.findById('2')
+    .then((restaurant)=>{
+         newFav = restaurant;
+        return User.findById('1')
+    }).then((user)=>{
+            user.setFavourites(newFav)
+            res.status(200).send('succesfully added to favourites')
     }).catch(err=>res.send(err))
   
     // Restaurant.findAll({include:[{model:User,where:{ UserId:'1' }}]

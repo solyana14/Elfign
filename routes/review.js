@@ -3,21 +3,48 @@ const bodyParser = require('body-parser')
 const Review = require('../models').Review
 const Comment = require('../models').Comment
 const User = require('../models').User
-
+const Ratings = require('../models').Ratings
 let reviewRoute = express.Router()
 
 reviewRoute.use(bodyParser.json())
 //create a review(a user) for a specific resturant
+let testReview;
 reviewRoute
 .post('/create',(req,res)=>{
     Review.create({
-        body:'this is a revieww body',
-        title: 'title of Review',
+        body:req.body.body,
+        title: req.body.title,
         UserId:'1', //userId and restaurantId is generated from the req.params
         RestaurantId:'1'
-   }).then((result)=>{
-       res.status(200).send( result)
+   }).then((createdreview)=>{
+    testReview = createdreview
+       return Ratings.create({
+        wifi:req.body.wifi,
+            cleanliness:req.body.cleanliness,
+            foodQuality:req.body.foodQuality,
+            service: req.body.service,
+            location: req.body.location,
+            parking:req.body.parking
+       }).then((rating=>{
+        testReview.setRating(rating)
+        //rating.setReview(review)//this is because the ReviewId is in the rating
+        res.status(200).send(testReview)
+       }))
    })
+})
+// ** make this creating independet to a review
+.post('/createRating/:id',(req,res)=>{
+    Ratings.create({
+        ReviewId: req.params.id,
+        wifi:req.body.wifi,
+            cleanliness:req.body.cleanliness,
+            foodQuality:req.body.foodQuality,
+            service: req.body.service,
+            location: req.body.location,
+            parking:req.body.parking
+       }).then(result=>{
+           res.status(200).send(result)
+       })
 })
 // *** Change this all nested true to the correct models to include and remove un-neccesary inclusions
 //get ALL reviews for a specific restaurant
