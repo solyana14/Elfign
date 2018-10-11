@@ -10,13 +10,21 @@ var newFav
 userRoute.post('/signup', (req,res)=>{//sample user signup
     User.create({
         userName: req.body.userName,
-        firstName: req.body.firstName
+        firstName: req.body.firstName,
+        email:req.body.email,
+        lastName:req.body.lastName
     }).then((user)=>{
         res.status(200).send(user)
     }).catch((err)=>{
         res.status(404).send(err)
     })
 })
+//** This route is for testing only */
+// .get('/all',(req,res)=>{
+//     User.findAll().then(users=>{
+//         res.send(users)
+//     })
+// })
 //get my previous reviews including  the restaurant it belongs too
 .get('/getmyreview',(req,res)=>{
     Review.findAll({include: [{ all: true, nested: true }]},{ UserId: 1})
