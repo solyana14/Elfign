@@ -17,6 +17,7 @@ reviewRoute
         UserId:'1', //userId and restaurantId is generated from the req.params
         RestaurantId:'1'
    }).then((createdreview)=>{
+       console.log(createdreview.validate())
     testReview = createdreview
        return Ratings.create({
         wifi:req.body.wifi,
@@ -30,6 +31,8 @@ reviewRoute
         //rating.setReview(review)//this is because the ReviewId is in the rating
         res.status(200).send(testReview)
        }))
+   }).catch(err=>{
+       res.status(404).send(err)
    })
 })
 // ** make this creating independet to a review
