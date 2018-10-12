@@ -9,13 +9,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false
       },
       phoneNumber:{
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull:true
       },
       webSite:{
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:true
+      },
+      email:{
+        type:Sequelize.STRING,
+        allowNull:true
       },
       createdAt: {
         //allowNull: false,

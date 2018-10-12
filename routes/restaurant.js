@@ -13,12 +13,11 @@ restaurantRoute
 //create a restaurant
 
 .post('/create',(req,res)=>{
-    let phoneNumber = parseInt(req.body.phoneNumber)
-    console.log(phoneNumber)
     Restaurant.create({
         name:req.body.name,
         phoneNumber:req.body.phoneNumber,
         webSite: req.body.webSite,
+        email:req.body.email
    }).then((restaurant)=>{  
        testRestaurant=restaurant
        return Location.create({
@@ -35,10 +34,10 @@ restaurantRoute
                res.status(200).send(testRestaurant)
            })
            //res.status(200).send(testRestaurant)
-       }).catch(err=>{
-        res.status(404).send('error: ', err)
-    })
-   })
+       })
+   }).catch(err=>{
+    res.status(404).send( err)
+})
 })
 // .post('/addcusine/:id',(req,res)=>{
 //     Cusine.findOrCreate({where:{name:req.body.name}}).then((cusine,created)=>{

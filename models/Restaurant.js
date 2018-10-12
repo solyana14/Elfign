@@ -1,9 +1,28 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Restaurant = sequelize.define('Restaurant', {
-    name: DataTypes.STRING,
-    phoneNumber: DataTypes.INTEGER,
-    webSite: DataTypes.STRING
+    name:{
+      type:DataTypes.STRING,
+      allowNull:false
+    },
+    phoneNumber: {
+      type:DataTypes.INTEGER,
+      allowNull:true,
+      validate:{
+        isNumeric:true
+      }
+    },
+    webSite: {
+      type: DataTypes.STRING,
+      allowNull:true
+    },
+    email:{
+      type:DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isEmail: true,
+      }
+    }
     //priceRange: DataTypes.ARRAY(sequelize.DECIMAL)
   }, {});
   /* add a m-n rln bln Restaurant and Cusine
