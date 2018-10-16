@@ -10,8 +10,8 @@ reviewRoute.use(bodyParser.json())
 //create a review(a user) for a specific resturant
 let testReview;
 reviewRoute
-//** here if the rating failed it would still create the review */
-.post('/create',(req,res)=>{
+//** here if the rating failed it would not still create the review */
+.post('/create/:userId/:restId',(req,res)=>{
     Review.create({
         body:req.body.body,
         title: req.body.title,
@@ -33,7 +33,7 @@ reviewRoute
         res.status(200).send(testReview)
        }))
    }).catch(err=>{
-       res.status(404).send(err)
+       res.status(500).send(err)
    })
 })
 // ** make this creating independet to a review
@@ -54,8 +54,8 @@ reviewRoute
 })
 // *** Change this all nested true to the correct models to include and remove un-neccesary inclusions
 //get ALL reviews for a specific restaurant
-.get('/getreview/:RestId',(req,res)=>{
-        Review.findAll({where:{RestaurantId: req.params.RestId} ,
+.get('/getreview/:restId',(req,res)=>{
+        Review.findAll({where:{RestaurantId: req.params.restId} ,
             include: [{ model: Ratings, nested: true },
                 {model: User,as:'Reviewer'},
                 {model: Restaurant}]} ).then((reviews)=>{
@@ -64,11 +64,11 @@ reviewRoute
             res.status(404).send('error: ', err)
         })
 })
-.get('/getreview/:RestId/:id',(req,res)=>{
+.get('/getreview/:restId/:id',(req,res)=>{
     Review.findOne({include: [{ model: Ratings, nested: true },
         {model: User,as:'Reviewer'},
         {model: Restaurant}],
-        where:{ id: req.params.id,RestaurantId:req.params.RestId}})
+        where:{ id: req.params.id,RestaurantId:req.params.restId}})
     .then((review)=>{
          res.status(200).send({review})
     }).catch(err=>{
@@ -76,12 +76,12 @@ reviewRoute
     })
 })
 //include: [{ all: true, nested: true }]
-.delete('/deletereview/:id',(req,res)=>{
+.delete('/delete/:id',(req,res)=>{
     // *** Change this from find all to deleteOne
     Review.destroy({where:{id:req.params.id}}).then((review)=>{
         res.status(200).send({review})
 }).catch(err=>{
-    res.status(404).send('error: ', err)
+    res.status(500).send( err)
 })
 
      // This also works
@@ -97,9 +97,9 @@ reviewRoute
 // ** add an update route to update a review 
 // PATCH single owner
 })
-.patch('/updatereview/:id', (req, res) => {
+.patch('/update/:id', (req, res) => {
     const updates = req.body.updates;
-    //send updates from the body as object for flexibility of updating as mnay cloumns as we want
+    //send updates from the body as object for flexibility of updating as many cloumns as we want
     Review.findOne({where: { id: req.params.id }
     }).then(review => {
         return review.updateAttributes(updates)

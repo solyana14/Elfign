@@ -116,6 +116,20 @@ i.e if Location fails the restaurant should fail
 
 
 //this is very IMPORTANTTTT
+.patch('/update/:id', (req, res) => {
+    const updates = req.body.updates;
+    //send updates from the body as object for flexibility of updating as many cloumns as we want
+    Restaurant.findOne({where: { id: req.params.id }
+    }).then(restaurant => {
+        return restaurant.updateAttributes(updates)
+      })
+      .then(updatedRestaurant => {
+        res.send({updatedRestaurant});
+      })
+      .catch(err=>{
+        res.status(404).send( err)
+    });
+  });
 // PATCH single owner
 // app.patch('/owner/:id', (req, res) => {
 //     const id = req.params.id;

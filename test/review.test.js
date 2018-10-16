@@ -18,21 +18,17 @@ chai.use(chaiHttp)
 describe('Review',()=>{
     beforeEach(()=>{
         // ** it should remove contents before running the test
-    //    await truncate()
+       //await truncate()
+       
        console.log('deleted i think')
     })
     it('should create a new reveiw for a specific restaurant', (done)=>{
         chai.request(app)
-        .post('/reviews/create')
+        .post('/reviews/create/1/1')
         .send({
-            "body":"Mami has the best kitfo in the world",
-            "title": "best place ever!!",
-            "wifi": 10,
-            "cleanliness": 19,
-            "foodQuality":14,
-            "service": 10,
-            "location":9,
-            "parking":7
+            "body":"Mami has the best kitfo in the world", "title": "best place ever!!",
+             "wifi": 10, "cleanliness": 1, "foodQuality":1,
+            "service": 10, "location":9, "parking":7
         }).end((err,res)=>{
             console.log(res.body)
             console.log(err)
@@ -67,6 +63,7 @@ describe('Review',()=>{
         chai.request(app)
         .get('/reviews/getreview/1/1')//firts params is restaurantId ,second reviewId
         .end((err,res)=>{
+            console.log(res.body)
               res.body.should.be.a('Object')
               res.body.review.should.be.a('Object')// ***this should be an object 
               res.body.review.should.have.property('title')
@@ -79,6 +76,11 @@ describe('Review',()=>{
             done()
         })
     })
- })
+    
+    // afterEach((done)=>{
+    //     truncate();
+    //     done()
+    // }) 
+})
 
 
