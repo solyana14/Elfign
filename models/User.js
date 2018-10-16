@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
         isEmail: true,
       }
-    } ,
+    } 
    
   }, {});
   User.associate = (models)=> {

@@ -9,13 +9,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       longitude: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.FLOAT,
+       // allowNull:true
       },
-      lattitude: {
-        type: Sequelize.DOUBLE
+      latitude: {
+        type: Sequelize.FLOAT,
+        //allowNull:true
       },
       relativeLocation: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false
       },
       createdAt: {
         allowNull: false,

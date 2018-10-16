@@ -11,7 +11,9 @@ restaurantRoute.use(bodyParser.json())
 let testRestaurant;
 restaurantRoute
 //create a restaurant
-
+/** here don't create the restaurant if all the models don't create the
+i.e if Location fails the restaurant should fail
+*/
 .post('/create',(req,res)=>{
     Restaurant.create({
         name:req.body.name,
@@ -21,13 +23,13 @@ restaurantRoute
    }).then((restaurant)=>{  
        testRestaurant=restaurant
        return Location.create({
-           longitude: 9.3653746,
-           lattitude: 34.4627364,
-           relativeLocation: 'some where around tele'
+           longitude: req.body.longitude,
+           latitude: req.body.latitude,
+           relativeLocation:req.body.relativeLocation
        }).then(location=>{
            //location.setRestaurant(testRestaurant);
            testRestaurant.setLocation(location)
-           return Cusine.findOrCreate({where:{name:'kitfo'}})
+           return Cusine.findOrCreate({where:{name:req.body.cusine}})
            .spread((cusine,created)=>{
                //console.log(testRestaurant.CusineId)
                testRestaurant.setCusines(cusine)
@@ -60,11 +62,12 @@ restaurantRoute
 //         })
 //     })
 // })
+
 //get all restaurant and it associated review
 .get('/getrestaurant',(req,res)=>{
         Restaurant.findAll({include: 
             [{ model: Review,include:[{model: User, as:'Reviewer'},{model: Ratings}]  },
-            {model: Location}
+            {model: Location},{model:Cusine}
         ]}).then((Restaurants)=>{
              res.status(200).send({Restaurants})
         }).catch(err=>{

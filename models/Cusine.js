@@ -1,7 +1,10 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Cusine = sequelize.define('Cusine', {
-    name: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      allowNull:false
+    }
   }, {});
   Cusine.associate = function(models) {
     // associations can be defined here

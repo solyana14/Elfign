@@ -9,22 +9,28 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       wifi: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+         //allowNull: true
       },
       cleanliness: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+        //allowNull: true
       },
       foodQuality: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+        //allowNull: true
       },
       service: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+       // allowNull: true
       },
       location: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+       // allowNull: true
       },
       parking: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+       // allowNull: true
       },
       ReviewId:{
         type:Sequelize.INTEGER

@@ -10,6 +10,7 @@ reviewRoute.use(bodyParser.json())
 //create a review(a user) for a specific resturant
 let testReview;
 reviewRoute
+//** here if the rating failed it would still create the review */
 .post('/create',(req,res)=>{
     Review.create({
         body:req.body.body,
@@ -48,7 +49,7 @@ reviewRoute
        }).then(result=>{
            res.status(200).send(result)
        }).catch(err=>{
-           res.status(404).send('error: ', err)
+           res.status(404).send(err)
        })
 })
 // *** Change this all nested true to the correct models to include and remove un-neccesary inclusions
