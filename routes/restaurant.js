@@ -29,6 +29,7 @@ i.e if Location fails the restaurant should fail
        }).then(location=>{
            //location.setRestaurant(testRestaurant);
            testRestaurant.setLocation(location)
+           /**change this to bulk create  */
            return Cusine.findOrCreate({where:{name:req.body.cusine}})
            .spread((cusine,created)=>{
                //console.log(testRestaurant.CusineId)
@@ -66,39 +67,54 @@ i.e if Location fails the restaurant should fail
 //get all restaurant and it associated review
 .get('/getrestaurant',(req,res)=>{
         Restaurant.findAll({include: 
-            [{ model: Review,include:[{model: User, as:'Reviewer'},{model: Ratings}]  },
+            [{ model: Review,include:[{model: User, as:'Reviewer'},{model: Ratings}] },
             {model: Location},{model:Cusine}
         ]}).then((Restaurants)=>{
              res.status(200).send({Restaurants})
         }).catch(err=>{
-            res.status(404).send('error: ', err)
+            res.status(404).send( err)
         })
-})//{include: [{ all: true, nested: true }]}
+})
+//{include: [{ all: true, nested: true }]}
 
 //get a specific restaurant and its associated review
+//this only returns the resturant review,reviewer and ratings
 .get('/getrestaurant/:id',(req,res)=>{
-    Restaurant.findAll({where: {id:req.params.id},include: [{ all: true, nested: true }]}).then((restaurant)=>{
+    Restaurant.findOne({where: {id:req.params.id},
+    include:  [{ model: Review,include:[{model: User, as:'Reviewer' ,attributes:['userName','lastName','firstName']},{model: Ratings}] },
+    {model: Location},{model:Cusine ,attributes:['name']}
+]}).then((restaurant)=>{
          res.status(200).send({restaurant})
     }).catch(err=>{
-        res.status(404).send('error: ', err)
+        res.status(404).send( err)
     })
 })
-//get details of the resturant only with out reviews
+// to get the restaurnat reviews only we go with the reviews 
+// .get('/getreviews/:id',(req,res)=>{
+//     Restaurant.findone({where: {id:req.params.id},
+//         include: [{ model: Cusine  },  {model: Location}
+//     ]}).then((Restaurants)=>{
+//          res.status(200).send({Restaurants})
+//     }).catch(err=>{
+//         res.status(404).send('error: ', err)
+//     })
+// })
+//get details of the resturant only, without reviews
 .get('/getdetails/:id',(req,res)=>{
-    Restaurant.findAll({include: 
+    Restaurant.findOne({include: 
         [{ model: Cusine  },
         {model: Location}
-    ]}).then((Restaurants)=>{
-         res.status(200).send({Restaurants})
+    ]}).then((restaurant)=>{
+         res.status(200).send({restaurant})
     }).catch(err=>{
-        res.status(404).send('error: ', err)
+        res.status(404).send( err)
     })
 })
-.delete('/deleteone/:id',(req,res)=>{
+.delete('/delete/:id',(req,res)=>{
     Restaurant.destroy({where:{id:req.params.id}}).then((restaurant)=>{
         res.status(200).send({restaurant})
     }).catch(err=>{
-        res.status(404).send('error: ', err)
+        res.status(500).send( err)
     })
 })
 // **** Need to figure out how to do the n*m associations here

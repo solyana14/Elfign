@@ -38,7 +38,7 @@ userRoute.post('/signup', (req,res)=>{//sample user signup
     .then((user)=>{
          res.status(200).send(user )
     }).catch((err)=>{
-        res.status(400).send(err+'fffffff')
+        res.status(400).send(err)
     })
 })
 // ** this should only return the favouries only 
@@ -51,7 +51,7 @@ userRoute.post('/signup', (req,res)=>{//sample user signup
 // })
 //add favourite restaurant to a user
 .get('/add/favourites',(req,res)=>{
-    Restaurant.findById('2')
+    Restaurant.findById('1')
     .then((restaurant)=>{
          newFav = restaurant;
         return User.findById('1')

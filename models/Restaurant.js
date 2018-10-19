@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   var Restaurant = sequelize.define('Restaurant', {
     name:{
       type:DataTypes.STRING,
-      allowNull:false
+      allowNull:false,
     },
     phoneNumber: {
       type:DataTypes.INTEGER,
