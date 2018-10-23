@@ -6,8 +6,9 @@
   "scripts": {
     "start": "nodemon server",
     "pretest": "sequelize db:migrate",
-    "test": " mocha ",
+    "test": " mocha  --exit",
     "posttest": "sequelize db:migrate:undo:all"  
+
   },
   "keywords": [],
   "author": "",
