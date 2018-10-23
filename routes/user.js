@@ -1,8 +1,10 @@
 const express = require('express')
 const Review = require('../models').Review
-const Comment = require('../models').Comment
 const User = require('../models').User
 const Restaurant = require('../models').Restaurant
+const Ratings = require('../models').Ratings
+const Location = require('../models').Location
+const Cusine = require('../models').Cusine
 const bodyParser = require('body-parser')
 let userRoute = express.Router()
 userRoute.use(bodyParser.json())
@@ -13,12 +15,40 @@ userRoute.post('/signup', (req,res)=>{//sample user signup
         firstName: req.body.firstName,
         email:req.body.email,
         lastName:req.body.lastName
+        //password: req.body.password
     }).then((user)=>{
         res.status(200).send(user)
     }).catch((err)=>{
         res.status(404).send(err)
     })
 })
+
+// .post('/login', (req,res)=>{//sample user signup
+//     // res.send('i really hope this works')
+//     User.findOne({username: req.body.username})
+//     .then((user)=>{
+//         if(!user){ //didn't input any username
+//         res.status(401).json({message:"no user by that name"})
+//         }else{
+//             if(user.password === req.body.password){
+//                 // let payload ={
+//                 //     username: req.body.username
+//                 // }
+//                 // let secret = configration.env.secret
+//                 // let token = jwt.sign(payload,secret)
+
+//                 res.status(200).json({
+//                     message:"correct userr so logged in"
+//                     // token
+//             })
+//             }else{
+//                 res.status(401).json({message:"incorrect password"})
+//             }
+//         }
+//     }).catch((err)=>{
+//         res.status(404).send(err)
+//     })
+// })
 //** This route is for testing only */
 // .get('/all',(req,res)=>{
 //     User.findAll().then(users=>{
@@ -26,38 +56,41 @@ userRoute.post('/signup', (req,res)=>{//sample user signup
 //     })
 // })
 //get my previous reviews including  the restaurant it belongs too
-.get('/getmyreview',(req,res)=>{
-    Review.findAll({include: [{ all: true, nested: true }]},{ UserId: 1})
+.get('/getmyreview/:id',(req,res)=>{
+    //{ all: true, nested: true }
+    Review.findAll({include: [{ model: Ratings, nested: true },  {model: Restaurant}]},{ UserId: req.params.id})
     .then((userReviews)=>{
          res.status(200).send({userReviews})
     })
 })
-
-.get('/profile',(req,res)=>{
-    User.findAll({include: [{ all: true, nested: true }],where:{id:1}})//{include: [{ all: true, nested: true }]}//{include: [{ model: Restaurant,as:'Favourites' },{UserId:'1'}]}
+//get the user details name,favourite places, past reviews
+.get('/profile/:id',(req,res)=>{
+    User.findOne({
+    include: [{ model: Review, include:{model: Ratings}},{ model: Restaurant, as: "Favourites",include:[{model: Cusine,attributes:["name"]}] }],
+    where:{id:req.params.id}})//{include: [{ all: true, nested: true }]}//{include: [{ model: Restaurant,as:'Favourites' },{UserId:'1'}]}
     .then((user)=>{
          res.status(200).send(user )
     }).catch((err)=>{
+
         res.status(400).send(err)
     })
 })
 // ** this should only return the favouries only 
-// .get('/favourites',(req,res)=>{
-//     User.findOne({
-//         where:{id:'1'},attributes:['Favourites']
-//     }).then((result)=>{
-//         res.send(result)
-//     })
-// })
+.get('/favourites',(req,res)=>{
+    User.findOne({ where:{id:'1'},include:[{model:Restaurant, as:'Favourites', include:[{model:Location}]}]
+    }).then((result)=>{
+        res.send({Favourites:result.Favourites})
+    })
+})
 //add favourite restaurant to a user
-.get('/add/favourites',(req,res)=>{
-    Restaurant.findById('1')
+.get('/add/favourites/:RestId/:id',(req,res)=>{
+    Restaurant.findById(req.params.RestId)
     .then((restaurant)=>{
          newFav = restaurant;
-        return User.findById('1')
+        return User.findById(req.params.id)
     }).then((user)=>{
             user.setFavourites(newFav)
-            res.status(200).send('succesfully added to favourites')
+            res.status(200).send({Message:'succesfully added to favourites'})
     }).catch(err=>res.send(err))
   
     // Restaurant.findAll({include:[{model:User,where:{ UserId:'1' }}]

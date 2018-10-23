@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon server",
+    "pretest": "sequelize db:migrate",
     "test": " mocha ",
-    "start": "nodemon server"
+    "posttest": "sequelize db:migrate:undo:all"  
   },
   "keywords": [],
   "author": "",

@@ -27,6 +27,7 @@ module.exports = {
         //     }
         // }
     },
+    
     email:{
       type: Sequelize.STRING,
       allowNull: false,

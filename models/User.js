@@ -32,9 +32,9 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
         isEmail: true,
       }
-    } 
-   
-  }, {});
+    },
+  },
+{ });
   User.associate = (models)=> {
     // associations can be defined here
     User.hasMany(models.Review)//{as: 'MyReviews'}
