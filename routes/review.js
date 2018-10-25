@@ -11,12 +11,12 @@ reviewRoute.use(bodyParser.json())
 let testReview;
 reviewRoute
 //** here if the rating failed it would not still create the review */
-.post('/create/:userId/:restId',(req,res)=>{
+.post('/create/:UserId/:RestId',(req,res)=>{
     Review.create({
         body:req.body.body,
         title: req.body.title,
-        UserId:'1', //userId and restaurantId is generated from the req.params
-        RestaurantId:'1'
+        UserId:req.params.UserId, //userId and restaurantId is generated from the req.params
+        RestaurantId:req.params.RestId
    }).then((createdreview)=>{
        console.log(createdreview.validate())
     testReview = createdreview

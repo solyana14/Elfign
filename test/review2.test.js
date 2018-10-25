@@ -7,8 +7,11 @@ const {app} = require('../server')
 const truncate =require ('./truncate')
 chai.use(chaiHttp)
 describe('Review',()=>{
-    beforeEach(()=>{
-    })
+    /**
+     * don't need this since we have a pre-post hooks
+     */
+    // beforeEach(()=>{
+    // })
     it('should fail to create a new reveiw with out a body', (done)=>{
         chai.request(app)
         .post('/reviews/create/1/1')
@@ -60,16 +63,16 @@ describe('Review',()=>{
     /**
      * the delete works uncomment when done with beforEach and afterEach hooks
      */
-    // it('should delete a Review with a specific Id',(done)=>{
-    //     chai.request(app)
-    //     .delete('/reviews/delete/1')
-    //     .end((err,res)=>{
-    //         //console.log(res.body)
-    //         res.body.should.be.a('Object')
-    //          res.body.review.should.be.a('Number') //1 or 0
-    //         done()
-    //     })
-    // })
+    it('should delete a Review with a specific Id',(done)=>{
+        chai.request(app)
+        .delete('/reviews/delete/1')
+        .end((err,res)=>{
+            //console.log(res.body)
+            res.body.should.be.a('Object')
+             res.body.review.should.be.a('Number') //1 or 0
+            done()
+        })
+    })
     it('should fail to delete a Review with a wrong Id',(done)=>{
         chai.request(app)
         .delete('/reviews/delete/1yt')

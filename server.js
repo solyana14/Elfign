@@ -15,9 +15,9 @@ app.use('/reviews',reviewRoute);
 app.use('/restaurant',restaurantRoute);
 app.use(bodyParser.json())
 
-
-app.listen(5000,()=>{
-    console.log('welcome heheheheh')
+let PORT = process.env.PORT
+app.listen(PORT,()=>{
+    console.log(`Server started on port ${PORT}`)
 })
 
 module.exports ={app}

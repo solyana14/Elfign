@@ -16,12 +16,15 @@ const {app} = require('../server')
 const truncate =require ('./truncate')
 chai.use(chaiHttp)
 describe('Review',()=>{
-    beforeEach(()=>{
-        // ** it should remove contents before running the test
-       //await truncate()
+    /**
+     * don't need this since we have a pre-post hooks
+     */
+    // beforeEach(()=>{
+    //     // ** it should remove contents before running the test
+    //    //await truncate()
        
-       console.log('deleted i think')
-    })
+    //    console.log('deleted i think')
+    // })
     it('should create a new reveiw for a specific restaurant', (done)=>{
         chai.request(app)
         .post('/reviews/create/1/1')
