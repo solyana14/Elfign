@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     Review.belongsTo(models.Ratings)
     Review.belongsTo(models.Restaurant,{onDelete: 'CASCADE'})
     Review.belongsTo(models.User,{as: 'Reviewer', foreignKey: 'UserId',onDelete: 'CASCADE'})
+    Review.belongsToMany(models.User,{as : "Liker",through:"LikeStatus", foreignKey:"ReviewId", otherKey:"UserId"})
   };
   return Review;
 };

@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Review)//{as: 'MyReviews'}
     //User.hasMany(models.Comment)//{as: 'MyComments'}
     User.belongsToMany(models.Restaurant,{as:'Favourites',through: 'UserRestaurant', foreignKey: 'UserId',otherKey: 'RestaurantId'})
+    User.belongsToMany(models.Review,{as:'LikedReviews',through: 'LikeStatus', foreignKey: 'UserId',otherKey: 'ReviewId'})
   };
   return User;
 };

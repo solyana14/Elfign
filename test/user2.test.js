@@ -67,6 +67,14 @@ describe('User',()=>{
             done()
         })
     })
+    it('like or mark a review as helpful',(done)=>{
+        chai.request(app)
+        .get('/user/like/1/1') // /:ReviewId/:UserId
+        .end((err,res)=>{
+            console.log(res.body)
+            done()
+        })
+    })
     it('should Get the favourite place of a USER ', (done)=>{
         chai.request(app)
         .get('/user/favourites/1')//ResturantId/UserId

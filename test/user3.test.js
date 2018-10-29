@@ -10,6 +10,7 @@ describe('User',()=>{
      */
     // beforeEach(()=>{
     // })
+   
     it('should UPDATE firtsName and lastName of a USER ', (done)=>{
         chai.request(app)
         .patch('/user/update/1')

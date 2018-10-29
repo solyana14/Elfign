@@ -8,7 +8,7 @@ const Cusine = require('../models').Cusine
 const bodyParser = require('body-parser')
 let userRoute = express.Router()
 userRoute.use(bodyParser.json())
-var newFav
+var newFav, likedReview
 userRoute
 .post('/signup', (req,res)=>{//sample user signup
     User.create({
@@ -67,12 +67,13 @@ userRoute
 //get the user details name,favourite places, past reviews
 .get('/profile/:id',(req,res)=>{
     User.findOne({
-    include: [{ model: Review, include:{model: Ratings}},{ model: Restaurant, as: "Favourites",include:[{model: Cusine,attributes:["name"]}] }],
+        include: [{ all: true, nested: true }],
+   // include: [{ model: Review, include:{model: Ratings}},{ model: Restaurant, as: "Favourites",include:[{model: Cusine,attributes:["name"]}] }],
     where:{id:req.params.id}})//{include: [{ all: true, nested: true }]}//{include: [{ model: Restaurant,as:'Favourites' },{UserId:'1'}]}
     .then((user)=>{
          res.status(200).send(user )
     }).catch((err)=>{
-
+        console.log(err)
         res.status(400).send(err)
     })
 })
@@ -111,6 +112,47 @@ userRoute
 	//    res.send(projects);
 	// });
 })
+//Like a review
+/** 
+ * if a user already likes a review then it should not like it again --done
+ * if a user dislikes a review then should remove that dislike before liking it --done
+ */
+.get('/like/:RevId/:id',(req,res)=>{
+Review.findById(req.params.RevId)
+    .then((review)=>{
+        likedReview = review;
+        return User.findById(req.params.id)
+    }).then((user)=>{
+            user.setLikedReviews(likedReview,{ through: { isLike:true } })
+            //user.addProject(project, { through: { status: 'started' }})
+            res.status(200).send({Message:'succesfully liked a review',likedReview})
+    }).catch(err=>res.send(err))
+})
+//this works wuhuu
+.get('/dislike/:RevId/:id',(req,res)=>{
+    Review.findById(req.params.RevId)
+        .then((review)=>{
+            likedReview = review;
+            return User.findById(req.params.id)
+        }).then((user)=>{
+                user.setLikedReviews(likedReview,{ through: { isLike:false } })
+                //user.addProject(project, { through: { status: 'started' }})
+                res.status(200).send({Message:'succesfully liked a review',likedReview})
+        }).catch(err=>res.send(err))
+    })
+/**
+ * 
+ */
+// .get('/unlike/:RevId/:id',(req,res)=>{
+//     Review.findById(req.params.RevId)
+//         .then((review)=>{
+//             likedReview = review;
+//             return User.findById(req.params.id)
+//         }).then((user)=>{
+//                 user.setLikedReviews(likedReview)
+//                 res.status(200).send({Message:'succesfully liked a review'})
+//         }).catch(err=>res.send(err))
+//     })
 
 .delete('/delete/:id',(req,res)=>{
     User.destroy({where:{id:req.params.id}}).then((user)=>{

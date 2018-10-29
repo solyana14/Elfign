@@ -64,13 +64,16 @@ reviewRoute
             res.status(404).send('error: ', err)
         })
 })
+/**here the it should return the like as numbers not as liker */
 .get('/getreview/:restId/:id',(req,res)=>{
-    Review.findOne({include: [{ model: Ratings, nested: true },
-        {model: User,as:'Reviewer'},
-        {model: Restaurant}],
-        where:{ id: req.params.id,RestaurantId:req.params.restId}})
+     Review.findOne({//include: [{ model: Ratings, nested: true },
+    //     {model: User,as:'Reviewer'},
+    //     {model: Restaurant}],
+    include: [{ all: true, nested: true }],
+        where:{ id: req.params.id,RestaurantId:req.params.restId}}
+        )
     .then((review)=>{
-         res.status(200).send({review})
+         res.status(200).send({review, likes: review.Liker.length})
     }).catch(err=>{
         res.status(404).send('error: ', err)
     })
